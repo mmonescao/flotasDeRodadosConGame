@@ -1,0 +1,56 @@
+import dependencias.*
+import otros_Rodados.*
+import trafic.*
+import colores.*
+
+test "flotaTest" {
+	
+	const deportes = new Dependencia()
+	deportes.setEmpleados(45)
+	const cultura = new Dependencia()
+	cultura.setEmpleados(31)
+	const cachito = new ChevroletCorsa()
+	cachito.setColor(rojo)
+	const corsaAzul = new ChevroletCorsa()
+	corsaAzul.setColor(azul)
+	const corsaVerde = new ChevroletCorsa()
+	corsaVerde.setColor(verde)
+	const kwidConTanque1 = new RenaultKwid()
+	kwidConTanque1.modificarTanque() 
+	const especial1 = new AutosEspeciales()
+	especial1.capacidad(5) 
+	especial1.velMax(160)
+	especial1.peso(1200)
+	especial1.color(beige)
+	deportes.agregarAFlota(cachito) 
+	deportes.agregarAFlota(corsaAzul) 
+	deportes.agregarAFlota(corsaVerde) 
+	deportes.agregarAFlota(kwidConTanque1) 
+	deportes.agregarAFlota(especial1) 
+	
+    assert.equals(6450, deportes.pesoTotalFlota())
+    assert.that(deportes.estaBienEquipada())
+    assert.equals(7, deportes.capacidadTotalEnColor(azul))
+    assert.equals(beige, deportes.colorDelRodadoMasRapido())
+    assert.that(deportes.esGrande())
+    assert.equals(25, deportes.capacidadFaltante())
+    
+    const kwidConTanque2 = new RenaultKwid()
+    kwidConTanque2.modificarTanque()
+    const kwid1 = new RenaultKwid()
+    trafic.setInterior(interiorPopular)
+    trafic.setMotor(motorBataton)
+    
+    cultura.agregarAFlota(cachito) 
+	cultura.agregarAFlota(kwidConTanque1) 
+	cultura.agregarAFlota(kwidConTanque2) 
+	cultura.agregarAFlota(kwid1) 
+	cultura.agregarAFlota(trafic)
+    
+    assert.equals(10700, cultura.pesoTotalFlota())
+    assert.notThat(cultura.estaBienEquipada())
+    assert.equals(10, cultura.capacidadTotalEnColor(azul))
+    assert.equals(rojo, cultura.colorDelRodadoMasRapido())
+    assert.notThat(cultura.esGrande())
+    assert.equals(5, cultura.capacidadFaltante())
+}

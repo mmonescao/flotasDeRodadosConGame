@@ -1,0 +1,55 @@
+import otros_Rodados.*
+import trafic.*
+import pedidos.*
+import colores.*
+import dependencias.*
+
+test "pedidos" {
+	const cachito = new ChevroletCorsa()
+	cachito.setColor(rojo)
+	
+	const pedido1 = new Pedido()
+	pedido1.distanciaARecorrer(960)
+	pedido1.tiempoMaximo(8)
+	pedido1.cantidadDePasajeros(4)
+	pedido1.agregarColorIncompatible(azul)
+	pedido1.agregarColorIncompatible(negro)
+	
+	assert.that(pedido1.autoPuedeSatisfacer(cachito))
+	
+	pedido1.agregarColorIncompatible(rojo)
+	
+	assert.notThat(pedido1.autoPuedeSatisfacer(cachito))
+
+	pedido1.cantidadDePasajeros(6)
+	
+	assert.notThat(pedido1.autoPuedeSatisfacer(cachito))
+	
+	const dependencia1 = new Dependencia()
+	
+	dependencia1.agregarAPedidos(pedido1)
+	dependencia1.agregarAFlota(cachito)
+	
+	assert.equals([pedido1],dependencia1.cualesPedidosNoSatisface())
+	assert.that(dependencia1.colorIncompatibleEnPedidos(rojo))
+	
+	const pedido2 = new Pedido()
+	pedido2.tiempoMaximo(5)
+	dependencia1.agregarAPedidos(pedido2)
+	dependencia1.relajarPedidos()
+	
+	assert.equals(6,pedido2.tiempoMaximo()) 
+	assert.equals(9,pedido1.tiempoMaximo()) 
+	
+	const pedido3 = new Pedido()
+	pedido3.agregarColorIncompatible(blanco)
+	pedido3.agregarColorIncompatible(beige)
+	pedido3.agregarColorIncompatible(verde)
+	
+	const dependencia2 = new Dependencia()
+	dependencia2.agregarAPedidos(pedido1)
+	dependencia2.agregarAPedidos(pedido3)
+	
+	assert.equals([azul,negro,rojo,blanco,beige,verde], dependencia2.coloresIncompatiblesDeLosPedidos())
+	
+}

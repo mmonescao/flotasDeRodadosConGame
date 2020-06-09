@@ -1,7 +1,76 @@
 import wollok.game.*
+import otros_Rodados.*
+import colores.*
+import paredes.*
+import direcciones.*
 
 program corsasEnElGame {
 	// hacer las inicializaciones necesarias 
 	
+	const cachito = new ChevroletCorsa()
+	const corsa2 = new ChevroletCorsa()
+	const corsa3 = new ChevroletCorsa()
+	cachito.setColor(rojo)
+	cachito.position(5,6)
+	corsa2.setColor(verde)
+	corsa2.position(2,8)
+	corsa3.setColor(azul)
+	corsa3.position(9,4)
+	
+	const paredLadrillo1 = new Pared()
+	paredLadrillo1.setTipo(paredLadrillo) 
+	paredLadrillo1.position(game.at(10,10))
+	const paredLadrillo2 = new Pared()
+	paredLadrillo2.setTipo(paredLadrilloRota) 
+	paredLadrillo2.position(game.at(13,14))
+	const paredMadera1 = new Pared()
+	paredMadera1.setTipo(paredMadera)
+	paredMadera1.position(game.at(2,2))
+	
+	
+	var todos = [cachito,corsa2,corsa3]
+	var activo = []
+	
+	
+	game.title("Flota")
+	game.height(15)
+	game.width(15)
+	
+	//controlar a cachito
+	keyboard.num1().onPressDo({
+		activo = todos.filter({corsa=> corsa == cachito})
+	})
+	//controlar a corsa2
+	keyboard.num2().onPressDo({
+		activo = todos.filter({corsa=> corsa == corsa2})
+	})
+	//controlar a corsa3
+	keyboard.num3().onPressDo({
+		activo = todos.filter({corsa=> corsa == corsa3})
+	})
+	//controlar a todos a la vez
+	keyboard.t().onPressDo({activo = todos.copy()})
+	
+	keyboard.up().onPressDo ({activo.forEach({corsa=>corsa.moverseAl(norte)})})	
+ 	keyboard.down().onPressDo ({activo.forEach({corsa=>corsa.moverseAl(sur)})})	
+	keyboard.left().onPressDo ({activo.forEach({corsa=>corsa.moverseAl(oeste)})})	
+	keyboard.right().onPressDo ({activo.forEach({corsa=>corsa.moverseAl(este)})})
+	keyboard.r().onPressDo({activo.forEach({corsa=>corsa.setColor(rojo)})})
+	keyboard.v().onPressDo({activo.forEach({corsa=>corsa.setColor(verde)})})
+	keyboard.a().onPressDo({activo.forEach({corsa=>corsa.setColor(azul)})})
+	
+	
+	game.addVisual(paredLadrillo1)
+	game.addVisual(paredLadrillo2)
+	game.addVisual(paredMadera1)
+	game.addVisual(cachito)
+	game.addVisual(corsa2)
+	game.addVisual(corsa3)
+	game.onCollideDo(cachito, {pared => cachito.chocar(pared)})
+	game.onCollideDo(corsa2, {pared => corsa2.chocar(pared)})
+	game.onCollideDo(corsa3, {pared => corsa3.chocar(pared)})
+	
+	
 	game.start()
+	
 }
